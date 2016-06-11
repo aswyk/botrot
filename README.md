@@ -1,0 +1,2 @@
+# botrot
+bot battle
