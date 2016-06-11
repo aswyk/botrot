@@ -1,12 +1,12 @@
-
-
-
+require("bot")
 
 local screen_w = 0
 local screen_h = 0
 
 local lg = love.graphics
 local font14 = nil
+
+local bot = bot.create(50, 50, 0, 50, 255, 50, 255)
 
 function love.load()
     -- Setting up a nice font
@@ -44,6 +44,8 @@ function love.draw()
             --love.graphics.setFont(font_14)
             lg.print( "botrot", 10, 10)
         lg.pop()
+
+        bot:draw()
 
     lg.pop()
 
