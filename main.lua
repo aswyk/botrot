@@ -1,4 +1,5 @@
 require("bot")
+require("bullet")
 
 local screen_w = 0
 local screen_h = 0
@@ -6,7 +7,7 @@ local screen_h = 0
 local lg = love.graphics
 local font14 = nil
 
-local bot = bot.create(50, 50, 0, 50, 255, 50, 255)
+local bot = bot.create(300, 600, 45, 50, 255, 50, 255)
 
 function love.load()
     -- Setting up a nice font
@@ -21,7 +22,9 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
 
-
+    if key == "a" then
+        bot:turnLeftSlow()
+    end
 end
 
 function love.keyreleased(key, scancode)
