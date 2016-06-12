@@ -9,6 +9,10 @@ local font14 = nil
 
 local bot = bot.create(300, 600, 45, 50, 255, 50, 255)
 
+local b = bullet.create(350, 550, 45, 255, 50, 50, 255)
+
+
+
 function love.load()
     -- Setting up a nice font
     local font14 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 14)
@@ -21,10 +25,6 @@ function love.load()
 end
 
 function love.keypressed(key, scancode, isrepeat)
-
-    if key == "a" then
-        bot:turnLeftSlow()
-    end
 end
 
 function love.keyreleased(key, scancode)
@@ -32,6 +32,37 @@ function love.keyreleased(key, scancode)
 end
 
 function love.mousemoved( x, y, dx, dy )
+end
+
+function love.update(dt)
+    if love.keyboard.isDown( "a" ) then
+        bot:turnLeftFast()
+    end
+
+    if love.keyboard.isDown( "d" ) then
+        bot:turnRightFast()
+    end
+
+    if love.keyboard.isDown( "w" ) then
+        bot:applyMainThruster()
+    end
+
+    if love.keyboard.isDown( "s" ) then
+        bot:applyReverseThruster()
+    end
+
+    if love.keyboard.isDown( "q" ) then
+        bot:applyStrafeLeftThruster()
+    end
+
+    if love.keyboard.isDown( "e" ) then
+        bot:applyStrafeRightThruster()
+    end
+
+
+    --bot:update()
+    bot:updateVelocity()
+    bot:updatePostion()
 end
 
 function love.draw()
@@ -49,6 +80,7 @@ function love.draw()
         lg.pop()
 
         bot:draw()
+        b:draw()
 
     lg.pop()
 
