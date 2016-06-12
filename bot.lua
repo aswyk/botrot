@@ -11,6 +11,8 @@ local font_16 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 16)
 
 local AngCor = -90
 
+local bullets = {}
+
 function bot.create(x, y, ang, r, g, b, a)
     local self = setmetatable({}, bot)
 
@@ -37,7 +39,6 @@ function bot.create(x, y, ang, r, g, b, a)
     self.m_maxVel = 2
     self.m_maxAccel = 2
 
-
     self.m_size = 32;
     self.m_scale = 0.25
 
@@ -50,6 +51,9 @@ function bot.create(x, y, ang, r, g, b, a)
                     self.m_size*self.m_scale,self.m_size*self.m_scale,
                     -self.m_size*self.m_scale,self.m_size*self.m_scale,
                     0,-self.m_size*self.m_scale}
+
+    self.ammo = { bullet.create(self.m_x, self.m_y, self.m_ang_deg, 255, 50, 50, 255) }
+    self.clipSize = 10;
 
     return self
 end
@@ -125,8 +129,53 @@ end
 function bot:update()
     --self.updateVelocity()
     --self.updatePosition()
+    self.draw()
 end
 
+function bot:fire()
+    b = bullet.create(self.m_x, self.m_y, self.m_ang_deg, 255, 50, 50, 255)
+    --table.insert(self.m_ammo, b)
+
+    table.insert(bullets, b)
+
+end
+
+--table.remove(t, 2)
+
+function bot:removeBullets()
+    local count = 0
+    for k, v in ipairs(bullets) do
+        count = count + 1
+
+
+        --t.window.width = 1280
+        --t.window.height = 720
+
+        if v:getX() < 0 then
+            table.remove(bullets, count)
+        elseif v:getX() > 1280 then
+            table.remove(bullets, count)
+        elseif v:getY() < 0 then
+            table.remove(bullets, count)
+        elseif v:getY() > 720 then
+            table.remove(bullets, count)
+        end
+
+    end
+end
+
+function bot:drawBullets()
+    --for k, v in ipairs(self.m_ammo) do
+    local count = 0
+    for k, v in ipairs(bullets) do
+        count = count + 1
+        v:updatePostion()
+        v:draw()
+        local str = "bullet : "..count
+        print(str)
+        v:printInfo()
+    end
+end
 
 function bot:draw()
 

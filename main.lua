@@ -25,6 +25,10 @@ function love.load()
 end
 
 function love.keypressed(key, scancode, isrepeat)
+    if key == "space" then
+        --bot:applyStrafeRightThruster()
+        bot:fire()
+    end
 end
 
 function love.keyreleased(key, scancode)
@@ -60,9 +64,15 @@ function love.update(dt)
     end
 
 
+
+
     --bot:update()
     bot:updateVelocity()
     bot:updatePostion()
+
+    bot:removeBullets()
+
+    b:updatePostion()
 end
 
 function love.draw()
@@ -81,6 +91,8 @@ function love.draw()
 
         bot:draw()
         b:draw()
+
+        bot:drawBullets()
 
     lg.pop()
 

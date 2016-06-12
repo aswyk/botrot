@@ -18,6 +18,8 @@ function bullet.create(x, y, ang, r, g, b, a)
     self.m_turnAngSlow = 3
     self.m_turnAngFast = 8
 
+    self.m_active = false
+
     self.m_r = r
     self.m_g = g
     self.m_b = b
@@ -27,7 +29,7 @@ function bullet.create(x, y, ang, r, g, b, a)
     self.m_y_size = 20;
     self.m_scale = 0.25
 
-    self.m_bulletSpeed = 5;
+    self.m_bulletSpeed = 15;
     self.m_xVel = 0
     self.m_yVel = 0
 
@@ -66,13 +68,32 @@ function bullet.create(x, y, ang, r, g, b, a)
     return self
 end
 
-function bot:updatePostion()
+function bullet:updatePostion()
 
     self.m_x = self.m_x + self.m_xVel
     self.m_y = self.m_y + self.m_yVel
 
+    --[[if self.m_y <= 0 then
+        self.m_y = 720
+    end
+    if self.m_x >= 1280 then
+        self.m_x = 350
+    end]]--
+
 end
 
+function bullet:printInfo()
+    local str = "bullet[" .. self.m_x .. "," .. self.m_y .. "]"
+    print(str)
+end
+
+function bullet:getX()
+    return self.m_x
+end
+
+function bullet:getY()
+    return self.m_y
+end
 
 function bullet:draw()
 
