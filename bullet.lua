@@ -27,9 +27,11 @@ function bullet.create(x, y, ang, r, g, b, a)
 
     self.m_x_size = 4;
     self.m_y_size = 20;
+    --self.m_scale = 0.25
     self.m_scale = 0.25
 
-    self.m_bulletSpeed = 15;
+    self.m_bulletSpeedUnScaled = 50;
+    self.m_bulletSpeed = self.m_bulletSpeedUnScaled * self.m_scale;
     self.m_xVel = 0
     self.m_yVel = 0
 

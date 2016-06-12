@@ -40,11 +40,11 @@ end
 
 function love.update(dt)
     if love.keyboard.isDown( "a" ) then
-        bot:turnLeftFast()
+        bot:turnLeftSlow()
     end
 
     if love.keyboard.isDown( "d" ) then
-        bot:turnRightFast()
+        bot:turnRightSlow()
     end
 
     if love.keyboard.isDown( "w" ) then
@@ -62,6 +62,10 @@ function love.update(dt)
     if love.keyboard.isDown( "e" ) then
         bot:applyStrafeRightThruster()
     end
+
+    --if love.keyboard.isDown( "space" ) then
+    --    bot:fire()
+    --end
 
 
 
