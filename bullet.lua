@@ -1,16 +1,15 @@
-bullet = {}--{ prompt = "$USER$ on $MACHINE$ in $PATH$"}
-bullet.__index = bullet
+Class = require("hump.class")
 
+require("mixins.health")
+require("entity")
 local lg = love.graphics
 --local lk = love.keyboard
 --local font_14 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 14)
 --local font_16 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 16)
 
 local AngCor = -90
-
-function bullet.create(x, y, ang, r, g, b, a)
-    local self = setmetatable({}, bullet)
-
+Bullet = Class {name = "Bullet"}
+function Bullet:init(x, y, ang, r, g, b, a)
     self.m_x = x
     self.m_y = y
     self.m_ang_deg = ang
@@ -30,13 +29,13 @@ function bullet.create(x, y, ang, r, g, b, a)
     --self.m_scale = 0.25
     self.m_scale = 0.25
 
-    self.m_bulletSpeedUnScaled = 50;
-    self.m_bulletSpeed = self.m_bulletSpeedUnScaled * self.m_scale;
+    self.m_BulletSpeedUnScaled = 50;
+    self.m_BulletSpeed = self.m_BulletSpeedUnScaled * self.m_scale;
     self.m_xVel = 0
     self.m_yVel = 0
 
-    self.m_xVel = self.m_bulletSpeed * math.cos((AngCor+self.m_ang_deg) * math.pi / 180)
-    self.m_yVel = self.m_bulletSpeed * math.sin((AngCor+self.m_ang_deg) * math.pi / 180)
+    self.m_xVel = self.m_BulletSpeed * math.cos((AngCor+self.m_ang_deg) * math.pi / 180)
+    self.m_yVel = self.m_BulletSpeed * math.sin((AngCor+self.m_ang_deg) * math.pi / 180)
 
     --self.m_geom = {32,0,    64,64,   0,64,   32,0}
     -- Making bot smaller, 64 is a bit to big
@@ -66,11 +65,9 @@ function bullet.create(x, y, ang, r, g, b, a)
 
 
     --love.graphics.line( points )
-
-    return self
 end
 
-function bullet:updatePostion()
+function Bullet:updatePosition()
 
     self.m_x = self.m_x + self.m_xVel
     self.m_y = self.m_y + self.m_yVel
@@ -84,20 +81,20 @@ function bullet:updatePostion()
 
 end
 
-function bullet:printInfo()
-    local str = "bullet[" .. self.m_x .. "," .. self.m_y .. "]"
+function Bullet:printInfo()
+    local str = "Bullet[" .. self.m_x .. "," .. self.m_y .. "]"
     print(str)
 end
 
-function bullet:getX()
+function Bullet:getX()
     return self.m_x
 end
 
-function bullet:getY()
+function Bullet:getY()
     return self.m_y
 end
 
-function bullet:draw()
+function Bullet:draw()
 
     -- Attemppting to draw to framebuffer for shell. Its not called framebuffer
     -- anymore, but rather "canvas"
@@ -117,3 +114,6 @@ function bullet:draw()
 
     lg.pop()
 end
+
+Bullet:include(Entity)
+Bullet:include(Damage)

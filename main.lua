@@ -1,3 +1,4 @@
+package.path = package.path .. ";./?/init.lua"
 require("bot")
 require("bullet")
 
@@ -7,12 +8,11 @@ local screen_h = 0
 local lg = love.graphics
 local font14 = nil
 
-local bot = bot.create(300, 600, 45, 50, 255, 50, 255)
-
-local b = bullet.create(350, 550, 45, 255, 50, 50, 255)
-
+local bot = Bot(300, 600, 45, 50, 255, 50, 255)
+local bot2 = Bot(120, 40, 45, 50, 255, 50, 255) 
 
 
+print(bot, Bot)
 function love.load()
     -- Setting up a nice font
     local font14 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 14)
@@ -71,12 +71,10 @@ function love.update(dt)
 
 
     --bot:update()
-    bot:updateVelocity()
-    bot:updatePostion()
-
+    bot:updatePosition()
+	bot2:updatePosition()
+	bot2:removeBullets()
     bot:removeBullets()
-
-    b:updatePostion()
 end
 
 function love.draw()
@@ -94,10 +92,9 @@ function love.draw()
         lg.pop()
 
         bot:draw()
-        b:draw()
-
+		bot2:draw()
         bot:drawBullets()
-
+		bot2:drawBullets()
     lg.pop()
 
 
