@@ -2,6 +2,8 @@ package.path = package.path .. ";./?/init.lua"
 require("bot")
 require("bullet")
 
+HC = require("HC")
+shapes = require("HC.shapes")
 local screen_w = 0
 local screen_h = 0
 
@@ -20,8 +22,9 @@ function love.load()
 
     screen_w = love.graphics.getWidth( )
     screen_h = love.graphics.getHeight( )
-
-
+	mouse = HC.circle(400, 300, 20)
+	mouse:moveTo(love.mouse.getPosition())
+	foo = HC.circle(400, 300, 30)
 end
 
 function love.keypressed(key, scancode, isrepeat)
@@ -33,6 +36,16 @@ end
 
 function love.keyreleased(key, scancode)
 
+end
+
+function love.update(dt)
+	colliding = false
+	mouse:moveTo(love.mouse.getPosition())
+
+	for shape, delta in pairs(HC.collisions(mouse)) do
+		colliding = true
+		break
+	end
 end
 
 function love.mousemoved( x, y, dx, dy )
@@ -78,8 +91,6 @@ function love.update(dt)
 end
 
 function love.draw()
-
-
     lg.push()
 
         lg.setColor(255,100,100,150)
