@@ -1,37 +1,43 @@
 Class = require("hump.class")
 
-EntityManager = Class {name = "EntityManager"; entities = {}}
+EntityManager = Class {
+	name = "EntityManager";
+	init = function (self, _)
+		print("in awdawdawd")
+		self.entities = {}
+	end;
 
-function EntityManager:update(dt)
-	local i = 1
-	local remove = {}
-	for k, v in pairs(self.entities) do
-		if v == false then
-			table.insert(remove, i)
+	update = function (self, dt)
+		local i = 1
+		local remove = {}
+		for k, v in pairs(self.entities) do
+			if v == false then
+				table.insert(remove, i)
+			end
+			if v == true and k:update(dt) == true then
+				table.remove(remove, i)
+			end
+			i = i + 1
 		end
-		if v == true and k:update(dt) == true then
-			table.remove(remove, i)
+
+		for i, v in ipairs(remove) do
+			table.remove(self.entities, v)
 		end
-		i = i + 1
-	end
+	end;
 
-	for i, v in ipairs(remove) do
-		table.remove(self.entities, v)
-	end
-end
-
-function EntityManager:render(dt)
-	for k, v in pairs(self.entities) do
-		if v == true then
-			k:draw(dt)
+	render = function (self, dt)
+		for k, v in pairs(self.entities) do
+			if v == true then
+				k:draw(dt)
+			end
 		end
-	end
-end
+	end;
 
-function EntityManager:add(entity)
-	self.entities[entity] = true
-end
+	add = function (self, entity)
+		self.entities[entity] = true
+	end;
 
-function EntityManager:remove(entity)
-	self.entities[entity] = false
-end
+	remove = function (self, entity)
+		self.entities[entity] = false
+	end;
+}
