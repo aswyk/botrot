@@ -1,6 +1,6 @@
 Class = require("hump.class")
-require("bullet")
 require("entity")
+require("bullet")
 require("HC")
 require("mixins.collidable")
 
@@ -15,6 +15,7 @@ local Bullets = {}
 
 Bot = Class{
 	name = "Bot";
+	__includes = {"Entity", "Health", "Collidable"};
 	init = function (self, x, y, ang, r, g, b, a)
 		Entity.init(self)
 		self.m_x = x
@@ -176,9 +177,6 @@ Bot = Class{
 			count = count + 1
 			v:updatePosition()
 			v:draw()
-			local str = "Bullet : "..count
-			print(str)
-			v:printInfo()
 		end
 	end;
 	draw = function (self)
@@ -204,9 +202,6 @@ Bot = Class{
 	keyPressed = function (self, key, scancode, isrepeat ) end;
 }
 
-Bot:include(Collidable)
-Bot:include(Health)
-Bot:include(Entity)
 Bot.collision_handler["Bullet"] = function(self, other, sep_v)
 	self.take_damage(other.damage)
 end

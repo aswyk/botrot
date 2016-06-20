@@ -1,14 +1,18 @@
 Class = require("hump.class")
 require("entity_manager")
+em = EntityManager()
+
+
 Entity = Class{
 	name = "Entity";
 	init = function(self)
-		print(self.em)
-		self.em:add(self)
+		self.__entity_id = em:add(self)
 	end;
 
 	die = function(self)
-		self.em:remove(self)
+		print("removing id ", self.__entity_id)
+		em:remove(self.__entity_id)
 	end;
-	em = EntityManager(12)
+	__entity_id = 0
 }
+

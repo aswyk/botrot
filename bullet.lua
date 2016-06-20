@@ -1,5 +1,5 @@
 Class = require("hump.class")
-
+require("entity")
 require("mixins.health")
 require("entity")
 local lg = love.graphics
@@ -8,8 +8,9 @@ local lg = love.graphics
 --local font_16 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 16)
 
 local AngCor = -90
-Bullet = Class {name = "Bullet"}
+Bullet = Class {name = "Bullet", __includes = {"Entity", "Damage"}}
 function Bullet:init(x, y, ang, r, g, b, a)
+	Entity.init(self)
     self.m_x = x
     self.m_y = y
     self.m_ang_deg = ang
@@ -114,6 +115,3 @@ function Bullet:draw()
 
     lg.pop()
 end
-
-Bullet:include(Entity)
-Bullet:include(Damage)

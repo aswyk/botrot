@@ -1,7 +1,7 @@
 package.path = package.path .. ";./?/init.lua"
 require("bot")
 require("bullet")
-
+require("entity")
 HC = require("HC")
 shapes = require("HC.shapes")
 local screen_w = 0
@@ -13,8 +13,6 @@ local font14 = nil
 local bot = Bot(300, 600, 45, 50, 255, 50, 255)
 local bot2 = Bot(120, 40, 45, 50, 255, 50, 255) 
 
-
-print(bot, Bot)
 function love.load()
     -- Setting up a nice font
     local font14 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 14)
@@ -39,13 +37,7 @@ function love.keyreleased(key, scancode)
 end
 
 function love.update(dt)
-	colliding = false
-	mouse:moveTo(love.mouse.getPosition())
-
-	for shape, delta in pairs(HC.collisions(mouse)) do
-		colliding = true
-		break
-	end
+	em:prune()
 end
 
 function love.mousemoved( x, y, dx, dy )
