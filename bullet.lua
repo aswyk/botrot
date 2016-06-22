@@ -30,8 +30,9 @@ function Bullet:init(x, y, ang, r, g, b, a)
     --self.m_scale = 0.25
     self.m_scale = 0.25
 
-    self.m_BulletSpeedUnScaled = 50;
-    self.m_BulletSpeed = self.m_BulletSpeedUnScaled * self.m_scale;
+    -- Original m_bulletSpeedUnScaled value = 50
+    self.m_bulletSpeedUnScaled = 100;
+    self.m_bulletSpeed = self.m_bulletSpeedUnScaled * self.m_scale;
     self.m_xVel = 0
     self.m_yVel = 0
 
