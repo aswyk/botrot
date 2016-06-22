@@ -36,8 +36,8 @@ function Bullet:init(x, y, ang, r, g, b, a)
     self.m_xVel = 0
     self.m_yVel = 0
 
-    self.m_xVel = self.m_BulletSpeed * math.cos((AngCor+self.m_ang_deg) * math.pi / 180)
-    self.m_yVel = self.m_BulletSpeed * math.sin((AngCor+self.m_ang_deg) * math.pi / 180)
+    self.m_xVel = self.m_bulletSpeed * math.cos((AngCor+self.m_ang_deg) * math.pi / 180)
+    self.m_yVel = self.m_bulletSpeed * math.sin((AngCor+self.m_ang_deg) * math.pi / 180)
 
     --self.m_geom = {32,0,    64,64,   0,64,   32,0}
     -- Making bot smaller, 64 is a bit to big

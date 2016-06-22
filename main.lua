@@ -4,6 +4,8 @@ require("bullet")
 require("entity")
 HC = require("HC")
 shapes = require("HC.shapes")
+require("ai")
+
 local screen_w = 0
 local screen_h = 0
 
