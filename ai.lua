@@ -2,6 +2,8 @@ AI = {}--{ prompt = "$USER$ on $MACHINE$ in $PATH$"}
 AI.__index = AI
 
 
+-- Some comment about AI
+
 local lg = love.graphics
 local lk = love.keyboard
 

@@ -1,5 +1,6 @@
 require("bot")
 require("bullet")
+require("ai")
 
 local screen_w = 0
 local screen_h = 0
