@@ -455,6 +455,7 @@ local function newPointShape(...)
 end
 
 return {
+	Shape = Shape,
 	ConcavePolygonShape = ConcavePolygonShape,
 	ConvexPolygonShape  = ConvexPolygonShape,
 	CircleShape         = CircleShape,

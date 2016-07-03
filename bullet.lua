@@ -2,13 +2,15 @@ Class = require("hump.class")
 require("entity")
 require("mixins.health")
 require("entity")
+shapes = require("HC.shapes")
+Polygon = require("HC.polygon")
 local lg = love.graphics
 --local lk = love.keyboard
 --local font_14 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 14)
 --local font_16 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 16)
 
 local AngCor = -90
-Bullet = Class {name = "Bullet", __includes = {"Entity", "Damage"}}
+Bullet = Class {name = "Bullet", inherits = {Entity, Damage, ConvexPolygonShape}}
 function Bullet:init(x, y, ang, r, g, b, a)
 	Entity.init(self)
     self.m_x = x
@@ -69,7 +71,7 @@ function Bullet:init(x, y, ang, r, g, b, a)
     --love.graphics.line( points )
 end
 
-function Bullet:updatePosition()
+function Bullet:update(dt)
 
     self.m_x = self.m_x + self.m_xVel
     self.m_y = self.m_y + self.m_yVel
@@ -96,7 +98,7 @@ function Bullet:getY()
     return self.m_y
 end
 
-function Bullet:draw()
+function Bullet:draw(dt)
 
     -- Attemppting to draw to framebuffer for shell. Its not called framebuffer
     -- anymore, but rather "canvas"

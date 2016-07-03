@@ -33,6 +33,7 @@ local function include_helper(to, from, seen)
 		return seen[from]
 	end
 
+
 	seen[from] = to
 	for k,v in pairs(from) do
 		k = include_helper({}, k, seen) -- keys might also be tables
@@ -46,6 +47,10 @@ end
 -- deeply copies `other' into `class'. keys in `other' that are already
 -- defined in `class' are omitted
 local function include(class, other)
+	class.__is_a[other] = true
+	for k, v in pairs(other.__is_a or {}) do
+		class.__is_a[k] = v
+	end
 	return include_helper(class, other, {})
 end
 
@@ -58,6 +63,8 @@ local function new(class)
 	-- mixins
 	local inc = class.__includes or {}
 	if getmetatable(inc) then inc = {inc} end
+	class.__is_a = (class.__is_a or {})
+	class.__is_a[class] = true
 
 	for _, other in ipairs(inc) do
 		if type(other) == "string" then
@@ -69,8 +76,10 @@ local function new(class)
 	-- class implementation
 	class.__index = class
 	class.init    = class.init    or class[1] or function() end
+	class.__tostring = function() return ("<instance of %s>"):format(tostring(class.name)) end
 	class.include = class.include or include
 	class.clone   = class.clone   or clone
+	class.is_a = function(self, other) return self.__is_a[other] end
 
 	-- constructor call
 	return setmetatable(class, {__call = function(c, ...)

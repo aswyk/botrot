@@ -1,8 +1,9 @@
 Class = require("hump.class")
 require("entity")
 require("bullet")
-require("HC")
+Polygon = require("HC.polygon")
 require("mixins.collidable")
+require("mixins.health")
 
 local lg = love.graphics
 local lk = love.keyboard
@@ -11,13 +12,12 @@ local font_16 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 16)
 
 local AngCor = -90
 
-local Bullets = {}
-
 Bot = Class{
 	name = "Bot";
-	__includes = {"Entity", "Health", "Collidable"};
+	__includes = {Entity, Health, Collidable, shapes.ConvexPolygonShape};
 	init = function (self, x, y, ang, r, g, b, a)
 		Entity.init(self)
+		Health.init(self, 100)
 		self.m_x = x
 		self.m_y = y
 		self.m_ang_deg = ang
@@ -57,22 +57,16 @@ Bot = Class{
 		--self.m_geom = {32/2,0,    64/2,64/2,   0,64/2,   32/2,0}
 
 		--self.m_geom = {0,-16,    16,16,   -16,16,   0,-16}
-		self.m_geom = {0,-self.m_size*self.m_scale,
-						self.m_size*self.m_scale,self.m_size*self.m_scale,
-						-self.m_size*self.m_scale,self.m_size*self.m_scale,
-						0,-self.m_size*self.m_scale}
 
+		shapes.ConvexPolygonShape.init(self, Polygon(-self.m_size*self.m_scale,
+									self.m_size*self.m_scale,self.m_size*self.m_scale,
+									-self.m_size*self.m_scale,self.m_size*self.m_scale,
+									0,-self.m_size*self.m_scale))
+		HC.register(self)
 		self.ammo = { Bullet(self.m_x, self.m_y, self.m_ang_deg, 255, 50, 50, 255) }
 		self.clipSize = 10;
 	end;
-	updateVelocity = function (self)
-		--self.m_xVel = self.m_xVel + math.cos(self.m_ang_deg)
-		--self.m_yVel = self.m_yVel + math.sin(self.m_ang_rad)
-
-		--self.m_xVel = self.m_xVel + math.cos(45.0)
-		--self.m_yVel = self.m_yVel + math.sin(45.0)
-	end;
-	updatePosition = function (self)
+	updatePosition = function (self, dt)
 		self.m_xVel = self.m_xVel * self.m_dragCoef
 		self.m_yVel = self.m_yVel * self.m_dragCoef
 
@@ -90,6 +84,8 @@ Bot = Class{
 		elseif self.m_y < 0 then
 			self.m_y = 719
 		end
+		self:moveTo(self.m_x, self.m_y)
+		self:setRotation(self.m_ang_rad)
 	end;
 
 	applyMainThruster = function (self)
@@ -134,52 +130,14 @@ Bot = Class{
 		self.m_ang_deg = self.m_ang_deg + self.m_turnAngFast
 		self.m_ang_rad = self.m_ang_deg * math.pi / 180
 	end;
-	update = function (self)
-		--self.updateVelocity()
-		--self.updatePosition()
-		self.draw()
+	update = function (self, dt)
+		self:updatePosition(dt)
 	end;
 	fire = function (self)
-		b = Bullet(self.m_x, self.m_y, self.m_ang_deg, 255, 50, 50, 255)
-		--table.insert(self.m_ammo, b)
-
-		table.insert(Bullets, b)
-
+		Bullet(self.m_x, self.m_y, self.m_ang_deg, 255, 50, 50, 255)
 	end;
-	removeBullets = function (self)
-		local count = 0
-		for k, v in ipairs(Bullets) do
-			count = count + 1
 
-
-			--t.window.width = 1280
-			--t.window.height = 720
-			if v:getX() < 0 then
-				v:die()
-				table.remove(Bullets, count)
-			elseif v:getX() > 1280 then
-				v:die()
-				table.remove(Bullets, count)
-			elseif v:getY() < 0 then
-				v:die()
-				table.remove(Bullets, count)
-			elseif v:getY() > 720 then
-				v:die()
-				table.remove(Bullets, count)
-			end
-
-		end
-	end;
-	drawBullets = function (self)
-		--for k, v in ipairs(self.m_ammo) do
-		local count = 0
-		for k, v in ipairs(Bullets) do
-			count = count + 1
-			v:updatePosition()
-			v:draw()
-		end
-	end;
-	draw = function (self)
+	draw = function (self, dt)
 
 		-- Attemppting to draw to framebuffer for shell. Its not called framebuffer
 		-- anymore, but rather "canvas"
@@ -193,16 +151,20 @@ Bot = Class{
 
 		lg.setColor(self.m_r, self.m_g, self.m_b, self.m_a)
 
-		lg.translate( self.m_x, self.m_y )
-		lg.rotate( self.m_ang_rad )
-		love.graphics.line( self.m_geom )
+		--lg.translate( self.m_x, self.m_y )
+		--lg.rotate( self.m_ang_rad )
+		love.graphics.polygon('line', self._polygon:unpack())
 
 		lg.pop()
 	end;
 	keyPressed = function (self, key, scancode, isrepeat ) end;
 }
 
-Bot.collision_handler["Bullet"] = function(self, other, sep_v)
+Bot.collision_handler["Bullet"] = function(self, other, sep_v, dt)
 	self.take_damage(other.damage)
+end
+
+Bot.collision_handler["*"] = function(self, other, sep_v, dt)
+	print("collided with " .. tostring(other))
 end
 

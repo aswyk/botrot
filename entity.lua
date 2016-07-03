@@ -1,7 +1,7 @@
 Class = require("hump.class")
 require("entity_manager")
-em = EntityManager()
 
+em = EntityManager()
 
 Entity = Class{
 	name = "Entity";
@@ -10,9 +10,12 @@ Entity = Class{
 	end;
 
 	die = function(self)
-		print("removing id ", self.__entity_id)
-		em:remove(self.__entity_id)
+		if self.__can_die then
+			print("removing id ", self.__entity_id)
+			em:remove(self.__entity_id)
+		end
 	end;
-	__entity_id = 0
+	__entity_id = 0;
+	__can_die = true;
 }
 

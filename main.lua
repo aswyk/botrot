@@ -1,11 +1,10 @@
 package.path = package.path .. ";./?/init.lua"
+HC = require("HC")
 require("bot")
 require("bullet")
 require("entity")
-HC = require("HC")
 shapes = require("HC.shapes")
 require("ai")
-
 local screen_w = 0
 local screen_h = 0
 
@@ -13,8 +12,9 @@ local lg = love.graphics
 local font14 = nil
 
 local bot = Bot(300, 600, 45, 50, 255, 50, 255)
-local bot2 = Bot(120, 40, 45, 50, 255, 50, 255) 
+local bot2 = Bot(120, 40, 45, 50, 255, 50, 255)
 
+local dt = 0.1
 function love.load()
     -- Setting up a nice font
     local font14 = love.graphics.newFont("assets/fonts/Hack-Regular.ttf", 14)
@@ -22,9 +22,6 @@ function love.load()
 
     screen_w = love.graphics.getWidth( )
     screen_h = love.graphics.getHeight( )
-	mouse = HC.circle(400, 300, 20)
-	mouse:moveTo(love.mouse.getPosition())
-	foo = HC.circle(400, 300, 30)
 end
 
 function love.keypressed(key, scancode, isrepeat)
@@ -38,14 +35,10 @@ function love.keyreleased(key, scancode)
 
 end
 
-function love.update(dt)
-	em:prune()
-end
-
 function love.mousemoved( x, y, dx, dy )
 end
 
-function love.update(dt)
+function love.update(_dt)
     if love.keyboard.isDown( "a" ) then
         bot:turnLeftSlow()
     end
@@ -73,15 +66,9 @@ function love.update(dt)
     --if love.keyboard.isDown( "space" ) then
     --    bot:fire()
     --end
-
-
-
-
-    --bot:update()
-    bot:updatePosition()
-	bot2:updatePosition()
-	bot2:removeBullets()
-    bot:removeBullets()
+	em:update(_dt)
+	em:update_collision(_dt)
+	dt = _dt
 end
 
 function love.draw()
@@ -95,12 +82,6 @@ function love.draw()
             --love.graphics.setFont(font_14)
             lg.print( "botrot", 10, 10)
         lg.pop()
-
-        bot:draw()
-		bot2:draw()
-        bot:drawBullets()
-		bot2:drawBullets()
+	em:render(dt)
     lg.pop()
-
-
 end

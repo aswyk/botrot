@@ -1,3 +1,4 @@
+require("mixins.collidable")
 Class = require("hump.class")
 
 EntityManager = Class {
@@ -8,10 +9,12 @@ EntityManager = Class {
 	end;
 
 	update = function (self, dt)
-		for i=1, #self.entities do
+		local i = 1
+		while i <= #self.entities do
 			local e = self.entities[i]
-			if e ~= nil then
+			if e ~= nil and type(e.update) == "function" then
 				e:update(dt)
+				i = i + 1
 			end
 		end
 	end;
@@ -19,7 +22,7 @@ EntityManager = Class {
 	render = function (self, dt)
 		for i=1, #self.entities do
 			local e = self.entities[i]
-			if e ~= nil then
+			if e ~= nil and type(e.draw) == "function" then
 				e:draw(dt)
 			end
 		end
@@ -33,6 +36,18 @@ EntityManager = Class {
 		end
 		table.insert(self.entities, entity)
 		return #self.entities
+	end;
+
+	update_collision = function(self, dt)
+		for i, e in ipairs(self.entities) do
+			if e:is_a(shapes.Shape) and e:is_a(Collidable) then
+				for shape, delta in pairs(HC.collisions(e)) do
+					if e:collision(shape, delta, dt) then
+						HC:remove(e)
+					end
+				end
+			end
+		end
 	end;
 
 	remove = function (self, id)
