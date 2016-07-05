@@ -39,7 +39,6 @@ Bot = Class{
 		self.m_maxAccel = 5
 
 		self.m_size = 32;
-		--self.m_scale = 0.25
 		self.m_scale = 0.25
 
 		self.m_mainThrusterForce_US = 1
@@ -50,18 +49,9 @@ Bot = Class{
 		self.m_strafeThrusterForce = self.m_strafeThrusterForce_US * self.m_scale
 		self.m_reverseThrusterForce = self.m_strafeThrusterForce_US * self.m_scale
 
-
-
-		--self.m_geom = {32,0,    64,64,   0,64,   32,0}
-		-- Making bot smaller, 64 is a bit to big
-		--self.m_geom = {32/2,0,    64/2,64/2,   0,64/2,   32/2,0}
-
-		--self.m_geom = {0,-16,    16,16,   -16,16,   0,-16}
-
-		shapes.ConvexPolygonShape.init(self, Polygon(-self.m_size*self.m_scale,
-									self.m_size*self.m_scale,self.m_size*self.m_scale,
-									-self.m_size*self.m_scale,self.m_size*self.m_scale,
-									0,-self.m_size*self.m_scale))
+		shapes.ConvexPolygonShape.init(self, Polygon(self.m_size*self.m_scale,
+									self.m_size*self.m_scale,0,-self.m_size*self.m_scale,
+									-self.m_size*self.m_scale, self.m_size*self.m_scale))
 		HC.register(self)
 		self.ammo = { Bullet(self.m_x, self.m_y, self.m_ang_deg, 255, 50, 50, 255) }
 		self.clipSize = 10;
@@ -89,20 +79,10 @@ Bot = Class{
 	end;
 
 	applyMainThruster = function (self)
-		--self.m_XVel = 1 * math.cos(self.m_ang_rad)
-		--self.m_yVel = 1* math.sin(self.m_ang_rad)
-
-		--if self.m_xVel < self.m_maxVel then
-		--    if self.m_yVel < self.m_maxVel then
-				self.m_xVel = self.m_xVel + self.m_mainThrusterForce * math.cos((AngCor+self.m_ang_deg) * math.pi / 180)
-				self.m_yVel = self.m_yVel + self.m_mainThrusterForce * math.sin((AngCor+self.m_ang_deg) * math.pi / 180)
-		--    end
-		--end
+		self.m_xVel = self.m_xVel + self.m_mainThrusterForce * math.cos((AngCor+self.m_ang_deg) * math.pi / 180)
+		self.m_yVel = self.m_yVel + self.m_mainThrusterForce * math.sin((AngCor+self.m_ang_deg) * math.pi / 180)
 	end;
 	applyReverseThruster = function (self)
-		--self.m_XVel = 1 * math.cos(self.m_ang_rad)
-		--self.m_yVel = 1* math.sin(self.m_ang_rad)
-
 		self.m_xVel = self.m_xVel + self.m_reverseThrusterForce * math.cos((AngCor+self.m_ang_deg+180) * math.pi / 180)
 		self.m_yVel = self.m_yVel + self.m_reverseThrusterForce * math.sin((AngCor+self.m_ang_deg+180) * math.pi / 180)
 	end;
@@ -138,21 +118,9 @@ Bot = Class{
 	end;
 
 	draw = function (self, dt)
-
-		-- Attemppting to draw to framebuffer for shell. Its not called framebuffer
-		-- anymore, but rather "canvas"
-
-		-- Changing framebuffers. This means any drawing commands will be drawing on the fb, duh. ;git add -
-		--lg.setCanvas(self.m_fb)
-
-		--lg.clear( )
-
 		lg.push()
 
 		lg.setColor(self.m_r, self.m_g, self.m_b, self.m_a)
-
-		--lg.translate( self.m_x, self.m_y )
-		--lg.rotate( self.m_ang_rad )
 		love.graphics.polygon('line', self._polygon:unpack())
 
 		lg.pop()
