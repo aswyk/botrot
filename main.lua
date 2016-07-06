@@ -14,6 +14,7 @@ local font14 = nil
 local bot = Bot(300, 600, 45, 50, 255, 50, 255)
 local bot2 = Bot(120, 40, 45, 50, 255, 50, 255)
 
+
 local dt = 0.1
 function love.load()
     -- Setting up a nice font
@@ -26,7 +27,6 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
     if key == "space" then
-        --bot:applyStrafeRightThruster()
         bot:fire()
     end
 end
@@ -63,9 +63,12 @@ function love.update(_dt)
         bot:applyStrafeRightThruster()
     end
 
-    --if love.keyboard.isDown( "space" ) then
-    --    bot:fire()
-    --end
+	if love.keyboard.isDown("lshift") then
+		--awww yes, bullet hell!
+        bot:fire()
+	end
+
+
 	em:update(_dt)
 	em:update_collision(_dt)
 	dt = _dt
@@ -79,7 +82,6 @@ function love.draw()
 
         lg.push()
             lg.setColor(150,255,150,255)
-            --love.graphics.setFont(font_14)
             lg.print( "botrot", 10, 10)
         lg.pop()
 	em:render(dt)

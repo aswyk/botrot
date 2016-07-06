@@ -1,21 +1,21 @@
 Class = require("hump.class")
 require("entity_manager")
-
+require("mixins.linked_list")
 em = EntityManager()
 
 Entity = Class{
 	name = "Entity";
+	__includes = {LinkedList.Node};
 	init = function(self)
-		self.__entity_id = em:add(self)
+		em:push_front(self)
 	end;
 
 	die = function(self)
 		if self.__can_die then
-			print("removing id ", self.__entity_id)
-			em:remove(self.__entity_id)
+			self.__is_dead = true
 		end
 	end;
-	__entity_id = 0;
 	__can_die = true;
+	__is_dead = false;
 }
 

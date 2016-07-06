@@ -53,9 +53,14 @@ Bot = Class{
 									self.m_size*self.m_scale,0,-self.m_size*self.m_scale,
 									-self.m_size*self.m_scale, self.m_size*self.m_scale))
 		HC.register(self)
-		self.ammo = { Bullet(self.m_x, self.m_y, self.m_ang_deg, 255, 50, 50, 255) }
-		self.clipSize = 10;
+		self:moveTo(self.m_x, self.m_y)
+		self:setRotation(self.m_ang_rad)
 	end;
+
+	decon = function(self)
+		HC.remove(self)
+	end;
+
 	updatePosition = function (self, dt)
 		self.m_xVel = self.m_xVel * self.m_dragCoef
 		self.m_yVel = self.m_yVel * self.m_dragCoef
@@ -129,10 +134,5 @@ Bot = Class{
 }
 
 Bot.collision_handler["Bullet"] = function(self, other, sep_v, dt)
-	self.take_damage(other.damage)
+	self:take_damage(other)
 end
-
-Bot.collision_handler["*"] = function(self, other, sep_v, dt)
-	print("collided with " .. tostring(other))
-end
-

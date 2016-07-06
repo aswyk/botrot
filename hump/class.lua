@@ -76,6 +76,7 @@ local function new(class)
 	-- class implementation
 	class.__index = class
 	class.init    = class.init    or class[1] or function() end
+	class.decon	  = class.decon   or class[2] or function() end
 	class.__tostring = function() return ("<instance of %s>"):format(tostring(class.name)) end
 	class.include = class.include or include
 	class.clone   = class.clone   or clone

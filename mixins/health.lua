@@ -6,8 +6,10 @@ Health = Class {
 		self.health = hp
 	end;
 	take_damage = function(self, damage)
-		self.health = self.health - damage
-		if self.health < 0 then
+		if not damage:is_a(Damage) then return end
+		self.health = self.health - damage.damage
+		print("oww", self.health)
+		if self.health <= 0 then
 			self:die()
 		end
 	end;
